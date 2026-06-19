@@ -1,44 +1,23 @@
 package Razorpay.paymentlink.Entity.Payments;
 
-import java.util.UUID;
-
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
-@Table(name = "notify")
+@Data
+@Table(name = "notify_settings")
 public class Notify {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID nfid;
+    @Column(name = "notify_id")
+    private String notifyId;
 
-    @Column(name = "sms")
-    private Boolean sms;
+    @Column(name = "payment_link_id")
+    private String paymentLinkId; // Manual string link back to PaymentLink
 
     @Column(name = "email")
     private Boolean email;
 
-    public UUID getNfid() {
-        return nfid;
-    }
-
-    public void setNfid(UUID nfid) {
-        this.nfid = nfid;
-    }
-
-    public Boolean getSms() {
-        return sms;
-    }
-
-    public void setSms(Boolean sms) {
-        this.sms = sms;
-    }
-
-    public Boolean getEmail() {
-        return email;
-    }
-
-    public void setEmail(Boolean email) {
-        this.email = email;
-    }
+    @Column(name = "sms")
+    private Boolean sms;
 }

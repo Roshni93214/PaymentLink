@@ -1,14 +1,12 @@
 package Razorpay.paymentlink.Repository;
 
-import java.util.UUID;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.stereotype.Repository;
 import Razorpay.paymentlink.Entity.Payments.Customer;
-import Razorpay.paymentlink.Entity.Payments.PaymentLink;
+import java.util.Optional;
 
-public interface CustomerRepository extends JpaRepository<PaymentLink, UUID> {
-
-    Customer save(Customer customer);
-    
+@Repository
+public interface CustomerRepository extends JpaRepository<Customer, String> {
+    // Crucial for manual lookup since we aren't using traditional Hibernate mapping
+   Optional<Customer> findByPaymentLinkId(String paymentLinkId);
 }

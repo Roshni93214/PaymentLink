@@ -1,14 +1,11 @@
 package Razorpay.paymentlink.Repository;
 
-import java.util.UUID;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import Razorpay.paymentlink.Entity.Payments.PaymentLink;
+import org.springframework.stereotype.Repository;
 import Razorpay.paymentlink.Entity.Payments.Reminders;
+import java.util.Optional;
 
-public interface RemindersRepository extends JpaRepository<PaymentLink, UUID> {
-
-    Reminders save(Reminders reminders);
-    
+@Repository
+public interface RemindersRepository extends JpaRepository<Reminders, String> {
+    Optional<Reminders> findByPaymentLinkId(String paymentLinkId);
 }

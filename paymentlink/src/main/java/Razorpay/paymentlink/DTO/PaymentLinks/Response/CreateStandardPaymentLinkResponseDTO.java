@@ -1,10 +1,15 @@
 package Razorpay.paymentlink.DTO.PaymentLinks.Response;
 
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
-import Razorpay.paymentlink.Entity.Payments.Notes;
-import Razorpay.paymentlink.Entity.Payments.Notify;
-import Razorpay.paymentlink.Entity.Payments.Reminders;
+import Razorpay.paymentlink.DTO.PaymentLinks.Requests.CustomerDTO;
+import Razorpay.paymentlink.DTO.PaymentLinks.Requests.NotifyDTO;
+import Razorpay.paymentlink.DTO.PaymentLinks.Requests.RemindersDTO;
+
+//import java.util.UUID;
+
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +36,9 @@ public class  CreateStandardPaymentLinkResponseDTO {
    Boolean upiLink;
 //Notes notify
    //Payments
+   Map<String,String> notes=new HashMap<>();
+   CustomerDTO customer;
+   NotifyDTO notify;
    String referenceId;
    String shorturl;
    String status;
@@ -38,41 +46,6 @@ public class  CreateStandardPaymentLinkResponseDTO {
    Boolean reminderEnable;
   String userID;
   //reminders object
+  RemindersDTO reminders;
   String options;
-  public void setName(Object name) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setName'");
-  }
-  public void setEmail(Object email) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setEmail'");
-  }
-  public void setContact(Object contact) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setContact'");
-  }
-  public void setNotes(Notes savedNotes) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setNotes'");
-  }
-  public void setReminders(Reminders savedReminders) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setReminders'");
-  }
-  public void setNotify(Notify savedNotify) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setNotify'");
-  }
-  public void setPlinkId(Object plinkId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setPlinkId'");
-  }
-  public void setMethod(Object method) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setMethod'");
-  }
-  public void setPaymentId(Object paymentId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setPaymentId'");
-  }
 }

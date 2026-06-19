@@ -1,14 +1,12 @@
 package Razorpay.paymentlink.Repository;
 
-import java.util.UUID;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.stereotype.Repository;
 import Razorpay.paymentlink.Entity.Payments.Notes;
-import Razorpay.paymentlink.Entity.Payments.PaymentLink;
+import java.util.List;
 
-public interface NotesRepository extends JpaRepository<PaymentLink, UUID> {
-
-    Notes save(Notes notes);
-    
+@Repository
+public interface NotesRepository extends JpaRepository<Notes, String> {
+    // Allows your service layer to quickly retrieve all notes associated with a payment link
+    List<Notes> findByPaymentLinkId(String paymentLinkId);
 }

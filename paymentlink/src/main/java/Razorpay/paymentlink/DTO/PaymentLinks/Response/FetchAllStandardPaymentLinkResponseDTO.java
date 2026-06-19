@@ -1,6 +1,10 @@
 package Razorpay.paymentlink.DTO.PaymentLinks.Response;
 
-import java.util.UUID;
+import java.util.Map;
+
+import Razorpay.paymentlink.DTOs.CustomerDTO;
+import Razorpay.paymentlink.DTOs.NotifyDTO;
+//import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +30,10 @@ public class  FetchAllStandardPaymentLinkResponseDTO {
    String id;
    Boolean upiLink;
 //Notes notify
+private CustomerDTO customer; // Optional nested object
+    private NotifyDTO notify; // Optional nested object
+    private Map<String, String> notes;
+
    //Payments
    String referenceId;
    String shorturl;

@@ -1,9 +1,19 @@
 package Razorpay.paymentlink.Service;
 
-import Razorpay.paymentlink.DTO.PaymentLinks.Requests.CreateStandardPaymentLinkRequestDTO;
-import Razorpay.paymentlink.DTO.PaymentLinks.Response.CreateStandardPaymentLinkResponseDTO;
+import java.util.List;
+
+import Razorpay.paymentlink.DTOs.PaymentLinkFetchItemDto;
+import Razorpay.paymentlink.DTOs.PaymentLinkRequest;
+import Razorpay.paymentlink.DTOs.PaymentLinkResponse;
+import Razorpay.paymentlink.Entity.Payments.PaymentLink;
+//import Razorpay.paymentlink.Entity.Payments.PaymentLinkk;
 
 public interface PaymentLinkService {
-    CreateStandardPaymentLinkResponseDTO createPaymentLink(CreateStandardPaymentLinkRequestDTO createStandardPaymentLinkRequestDTO);
-    
+       PaymentLinkResponse createStandardPaymentLink(PaymentLinkRequest request);
+
+List<PaymentLink> getAllPaymentLinks(String referenceId);
+List<PaymentLink> fetchAllPaymentLinks(String referenceId);
+      
+    //paymentlink
+PaymentLink getPaymentLinkById(String plinkId);
 }

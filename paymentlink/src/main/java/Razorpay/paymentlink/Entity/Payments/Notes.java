@@ -3,24 +3,21 @@ package Razorpay.paymentlink.Entity.Payments;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
-
 @Entity
 @Data
 @Table(name = "notes")
 public class Notes {
 
-   @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long noteId;
+    @Id
+    @Column(name = "note_id")
+    private String noteId;
 
+    @Column(name = "payment_link_id")
+    private String paymentLinkId;
 
-    
-
-    @Column(name = "note_key", nullable = false, length = 100)
+    @Column(name = "note_key")
     private String noteKey;
 
-    @Size(max = 256, message = "Note value must not exceed 256 characters")
-    @Column(name = "note_value", length = 256)
+    @Column(name = "note_value")
     private String noteValue;
 }

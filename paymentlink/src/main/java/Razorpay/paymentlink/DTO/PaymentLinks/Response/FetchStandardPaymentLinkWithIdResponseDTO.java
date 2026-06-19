@@ -1,6 +1,7 @@
-package Razorpay.paymentlink.DTO.PaymentLinks.Response;
+/*package Razorpay.paymentlink.DTO.PaymentLinks.Response;
 
-import java.util.UUID;
+import Razorpay.paymentlink.DTOs.PaymentAttemptDTO;
+//import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,12 @@ public class  FetchStandardPaymentLinkWithIdResponseDTO {
    Boolean upiLink;
 //Notes notify
    //Payments
+   
+    private CustomerDTO customer;
+    private NotifyDTO notify;
+    private RemindersDTO reminders;
+    private Map<String, String> notes;
+    private List<PaymentAttemptDTO> payments; 
    String referenceId;
    String shorturl;
    String status;
@@ -34,4 +41,4 @@ public class  FetchStandardPaymentLinkWithIdResponseDTO {
    Boolean reminderEnable;
   String userID;
   
-}
+}*/

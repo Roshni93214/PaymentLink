@@ -1,33 +1,20 @@
 package Razorpay.paymentlink.Entity.Payments;
 
-import java.util.UUID;
-
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "reminders")
 public class Reminders {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID rid;
+    @Column(name = "reminder_id")
+    private String reminderId;
 
-    @Column(name = "status", length = 20)
-    private String status;
+    @Column(name = "payment_link_id")
+    private String paymentLinkId; // Manual string link back to PaymentLink
 
-    public UUID getRid() {
-        return rid;
-    }
-
-    public void setRid(UUID rid) {
-        this.rid = rid;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    @Column(name = "status")
+    private String status; // This catches "failed", "pending", etc.
 }

@@ -1,13 +1,20 @@
-package Razorpay.paymentlink.DTO.PaymentLinks.Response;
+/*package Razorpay.paymentlink.DTO.PaymentLinks.Response;
 
-import java.beans.Customizer;
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
-import Razorpay.paymentlink.Entity.Payments.Customer;
-import Razorpay.paymentlink.Entity.Payments.Notes;
-import Razorpay.paymentlink.Entity.Payments.Notify;
+import Razorpay.paymentlink.DTO.PaymentLinks.Requests.CustomerDTO;
+import Razorpay.paymentlink.DTO.PaymentLinks.Requests.NotifyDTO;
+import Razorpay.paymentlink.DTO.PaymentLinks.Requests.RemindersDTO;
+
+//import java.beans.Customizer;
+//import java.util.UUID;
+
+//import Razorpay.paymentlink.Entity.Payments.Customer;
+//import Razorpay.paymentlink.Entity.Payments.Notes;
+//import Razorpay.paymentlink.Entity.Payments.Notify;
 import Razorpay.paymentlink.Entity.Payments.Payment;
-import Razorpay.paymentlink.Entity.Payments.Reminders;
+//import Razorpay.paymentlink.Entity.Payments.Reminders;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,7 +35,7 @@ public class  CancelStandardPaymentLinkResponseDTO {
    Integer cancelledAt;
    String currency;
 //Customer 
-Customer customer;
+CustomerDTO customer;
    String description;
    Integer expireBy;
    Integer expiredAt;
@@ -37,8 +44,9 @@ Customer customer;
    Boolean upiLink;
 //Notes notify
    //Payments
-   Notify notify;
-   Notes notes;
+   NotifyDTO notify;
+    Map<String,String> notes= new HashMap<>();
+
    Payment payment;
    String referenceId;
    String shorturl;
@@ -47,7 +55,7 @@ Customer customer;
    Boolean reminderEnable;
   String userID;
 //Reminders object
-Reminders reminders;
+RemindersDTO reminders;
 
 
-}
+}*/

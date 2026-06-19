@@ -1,80 +1,111 @@
 package Razorpay.paymentlink.Entity.Payments;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Entity
-@Table(name = "payment_links")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "payment_links")
+@Access(AccessType.FIELD) // <-- FORCE HIBERNATE TO ONLY SCAN FIELDS, IGNORING CUSTOM GETTERS
 public class PaymentLink {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @Column(name = "plink_id", nullable = false, length = 50) 
+    private String plinkId; 
 
-    @Column(name = "plink_id", nullable = false)
-    private String plinkId;
+    @Column(name = "id_pk", insertable = false, updatable = false)
+    private Long databaseId; 
 
-    @Column(name = "accept_partial")
+    @Column
     private Boolean acceptPartial;
 
-    @Column(name = "amount")
+    @Column
     private Integer amount;
 
-    @Column(name = "amount_paid")
+    @Column
     private Integer amountPaid;
 
-    @Column(name = "callback_url")
-    private String callbackUrl;
-
-    @Column(name = "callback_method")
+    @Column
     private String callbackMethod;
 
-    @Column(name = "cancelled_at")
-    private Integer cancelledAt;
+    @Column(length = 500)
+    private String callbackUrl;
 
-    @Column(name = "created_at")
-    private Integer createdAt;
+    @Column
+    private Long cancelledAt;
 
-    @Column(name = "updated_at")
-    private Integer updatedAt;
+    @Column
+    private Long createdAt;
 
-    @Column(name = "currency", length = 10)
+    @Column(length = 10)
     private String currency;
 
-    @Column(name = "description")
+    @Column(length = 500)
     private String description;
 
-    @Column(name = "expire_by")
-    private Integer expireBy;
+    @Column
+    private Long expireBy;
 
-    @Column(name = "expired_at")
-    private Integer expiredAt;
+    @Column
+    private Long expiredAt;
 
-    @Column(name = "first_min_partial_amount")
+    @Column
     private Integer firstMinPartialAmount;
 
-    @Column(name = "upi_link")
-    private Boolean upiLink;
-
-    @Column(name = "reference_id", length = 40)
+    @Column
     private String referenceId;
 
-    @Column(name = "short_url")
-    private String shortUrl;
-
-    @Column(name = "status", length = 20)
-    private String status;
-
-    @Column(name = "reminder_enable")
+    @Column
     private Boolean reminderEnable;
 
-    @Column(name = "user_id")
+    @Column
+    private String shortUrl;
+
+    @Column(length = 30)
+    private String status;
+
+    @Column
+    private Long updatedAt;
+
+    @Column
     private String userId;
+
+    @Column
+    private String orderId;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "payment_link_notes", joinColumns = @JoinColumn(name = "payment_link_id"))
+    @MapKeyColumn(name = "note_key")
+    @Column(name = "note_value", length = 256)
+    private Map<String, String> notes = new HashMap<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "payment_link_payments", joinColumns = @JoinColumn(name = "payment_link_id"))
+    @Column(name = "payment_id")
+    private List<String> payments = new ArrayList<>();
+
+    @Column
+    private boolean upiLink;
+
+    // -----------------------------------------------------------------
+    // Existing Custom Methods (Safe from Hibernate processing now)
+    // -----------------------------------------------------------------
+    public String getPlinkId() { return this.plinkId; }
+    public void setPlinkId(String plinkId) { this.plinkId = plinkId; }
+
+    public String getOrderId() { return orderId; }
+    public void setOrderId(String orderId) { this.orderId = orderId; }
+
+    public Boolean isAcceptPartial() { return acceptPartial != null ? acceptPartial : false; }
+    public void setAcceptPartial(Boolean acceptPartial) { this.acceptPartial = acceptPartial; }
+
+    public boolean isUpiLink() { return upiLink; }
+    public void setUpiLink(boolean upiLink) { this.upiLink = upiLink; }
+
+    public Boolean isReminderEnable() { return reminderEnable != null ? reminderEnable : false; }
+    public void setReminderEnable(Boolean reminderEnable) { this.reminderEnable = reminderEnable; }
 }

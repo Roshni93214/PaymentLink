@@ -1,6 +1,9 @@
 package Razorpay.paymentlink.DTO.PaymentLinks.Requests;
 
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
+
+//import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,4 +19,5 @@ public class  UpdateStandardPaymentLinkRequestDTO {
    String referenceId;
    Integer expireBy;
    //Notes object
+    Map<String,String> notes= new HashMap<>();
 }
