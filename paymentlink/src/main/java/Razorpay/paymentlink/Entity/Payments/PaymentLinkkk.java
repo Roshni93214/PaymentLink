@@ -7,10 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.annotations.DialectOverride.DiscriminatorFormulas;
+
 @Entity
-@Data
+@DiscriminatorFormulas
 @Table(name = "payment_links")
-public class PaymentLinkkk
+public class PaymentLinkkk{
 
    @Id
    @Column(name = "plink_id", nullable = false, length = 50) 
