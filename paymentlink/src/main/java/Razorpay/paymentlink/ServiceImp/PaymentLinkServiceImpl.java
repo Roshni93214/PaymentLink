@@ -68,6 +68,32 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         paymentLink.setExpireBy(request.getExpireBy());
         paymentLink.setShortUrl("https://rzp.io/i/" + UUID.randomUUID().toString().substring(0, 7));
         paymentLink.setUserId("usr_mockAdmin123");
+        if (request.getOptions() != null) {
+
+            Object checkoutObj = request.getOptions().get("checkout");
+
+            if (checkoutObj instanceof java.util.Map<?, ?> checkoutMap) {
+
+                Object nameObj = checkoutMap.get("name");
+
+                if (nameObj instanceof String businessName) {
+                    paymentLink.setBusinessName(businessName);
+                }
+            }
+        }
+        if (request.getOptions() != null) {
+
+            Object checkoutObj = request.getOptions().get("checkout");
+
+            if (checkoutObj instanceof java.util.Map<?, ?> checkoutMap) {
+
+                Object nameObj = checkoutMap.get("name");
+
+                if (nameObj instanceof String businessName) {
+                    paymentLink.setBusinessName(businessName);
+                }
+            }
+        }
         
         // Handling ElementCollection map mapping inside PaymentLink entity
         if (request.getNotes() != null) {
@@ -153,6 +179,7 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         response.setExpiredAt(0L);
         response.setCancelledAt(0L);
         response.setUserId(paymentLink.getUserId());
+        response.setBusinessName(paymentLink.getBusinessName());
         response.setWhatsappLink(false);
 
         // Bind the child responses
@@ -212,6 +239,19 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
     paymentLink.setExpireBy(request.getExpireBy());
     paymentLink.setShortUrl("https://rzp.io/i/" + UUID.randomUUID().toString().substring(0, 7));
     paymentLink.setUserId("usr_mockAdmin123");
+        if (request.getOptions() != null) {
+
+            Object checkoutObj = request.getOptions().get("checkout");
+
+            if (checkoutObj instanceof java.util.Map<?, ?> checkoutMap) {
+
+                Object nameObj = checkoutMap.get("name");
+
+                if (nameObj instanceof String businessName) {
+                    paymentLink.setBusinessName(businessName);
+                }
+            }
+        }
 
     if (request.getNotes() != null) {
         paymentLink.setNotes(request.getNotes());
@@ -294,6 +334,7 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
     response.setExpiredAt(0L);
     response.setCancelledAt(0L);
     response.setUserId(paymentLink.getUserId());
+        response.setBusinessName(paymentLink.getBusinessName());
     response.setWhatsappLink(false);
 
     response.setCustomer(customerDTO);
@@ -323,9 +364,9 @@ public PaymentLinkListResponse getAllPaymentLinks(String referenceId, String pay
     for (PaymentLink paymentLink : links) {
         
         // CRITICAL FILTER 1: Must be a UPI link
-        if (!paymentLink.isUpiLink()) {
-            continue;
-        }
+        //if (!paymentLink.isUpiLink()) {
+        //    continue;
+      //  }
 
         // CRITICAL FILTER 2: Match reference_id if provided
         if (referenceId != null && !referenceId.equals(paymentLink.getReferenceId())) {
@@ -390,6 +431,8 @@ public PaymentLinkListResponse getAllPaymentLinks(String referenceId, String pay
         item.setUserId(paymentLink.getUserId());
         item.setUpiLink(paymentLink.isUpiLink());
         item.setWhatsappLink(false);
+        item.setBusinessName(paymentLink.getBusinessName());
+        item.setHideTopbar(paymentLink.isHideTopbar());
 
         // Attach mapped records
         item.setCustomer(customerDTO);
@@ -473,6 +516,8 @@ public PaymentLinkResponse getPaymentLinkById(String id) {
     response.setUserId(paymentLink.getUserId());
     response.setUpiLink(paymentLink.isUpiLink()); // Standard = false, UPI = true
     response.setWhatsappLink(false);
+    response.setBusinessName(paymentLink.getBusinessName());
+    response.setHideTopbar(paymentLink.isHideTopbar());
     
     // Explicit hardcoded overrides matching Razorpay behavior
     response.setExpiredAt(0L);
@@ -677,6 +722,36 @@ public PaymentLinkResponse cancelPaymentLink(String id) {
     // 7. Return via your verified retrieval compilation pipeline
     return this.getPaymentLinkById(id);
 }
+    @Override
+    @Transactional
+    public Boolean sendOrResendNotification(String id, String medium) {
+
+        PaymentLink paymentLink = paymentLinkRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("The id provided does not exist"));
+
+        if (!"sms".equalsIgnoreCase(medium)
+                && !"email".equalsIgnoreCase(medium)) {
+
+            throw new IllegalArgumentException("not a valid notification medium");
+        }
+
+        Notify notify = notifyRepository.findByPaymentLinkId(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("notification settings not found"));
+
+        if ("sms".equalsIgnoreCase(medium)) {
+            notify.setSms(true);
+        }
+
+        if ("email".equalsIgnoreCase(medium)) {
+            notify.setEmail(true);
+        }
+
+        notifyRepository.save(notify);
+
+        return true;
+    }
 
 }
 

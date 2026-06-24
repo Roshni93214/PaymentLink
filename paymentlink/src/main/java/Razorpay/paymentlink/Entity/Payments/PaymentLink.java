@@ -85,6 +85,8 @@ public void setReferenceId(String referenceId) { this.referenceId = referenceId;
 
     @Column(name = "user_id")
     private String userId;
+    @Column(name = "business_name")
+    private String businessName;
 
 
 // Add this field inside your existing PaymentLink model class implrment

@@ -15,6 +15,6 @@ public interface PaymentLinkService {
     PaymentLinkResponse updatePaymentLink(String id, PaymentLinkUpdateRequest request);
     PaymentLinkResponse cancelPaymentLink(String id);
     PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request);
-
+    Boolean sendOrResendNotification(String id, String medium);
 }
 
