@@ -109,6 +109,30 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
                     paymentLink.setBusinessName(businessName);
                 }
                 Object configObj = checkoutMap.get("config");
+                Object partialPaymentObj = checkoutMap.get("partial_payment");
+
+                if (partialPaymentObj instanceof java.util.Map<?, ?> partialMap) {
+
+                    Object minAmountLabel = partialMap.get("min_amount_label");
+                    if (minAmountLabel instanceof String value) {
+                        paymentLink.setMinAmountLabel(value);
+                    }
+
+                    Object partialAmountLabel = partialMap.get("partial_amount_label");
+                    if (partialAmountLabel instanceof String value) {
+                        paymentLink.setPartialAmountLabel(value);
+                    }
+
+                    Object partialAmountDescription = partialMap.get("partial_amount_description");
+                    if (partialAmountDescription instanceof String value) {
+                        paymentLink.setPartialAmountDescription(value);
+                    }
+
+                    Object fullAmountLabel = partialMap.get("full_amount_label");
+                    if (fullAmountLabel instanceof String value) {
+                        paymentLink.setFullAmountLabel(value);
+                    }
+                }
 
                 if (configObj != null) {
                     paymentLink.setCheckoutConfig(configObj.toString());
@@ -207,6 +231,10 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         response.setEnableUpi(paymentLink.getEnableUpi());
         response.setEnableWallet(paymentLink.getEnableWallet());
         response.setCheckoutConfig(paymentLink.getCheckoutConfig());
+        response.setMinAmountLabel(paymentLink.getMinAmountLabel());
+        response.setPartialAmountLabel(paymentLink.getPartialAmountLabel());
+        response.setPartialAmountDescription(paymentLink.getPartialAmountDescription());
+        response.setFullAmountLabel(paymentLink.getFullAmountLabel());
         response.setWhatsappLink(false);
 
         // Bind the child responses

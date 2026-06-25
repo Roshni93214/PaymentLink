@@ -102,6 +102,17 @@ public void setReferenceId(String referenceId) { this.referenceId = referenceId;
     private Boolean enableWallet = true;
     @Column(name = "checkout_config", columnDefinition = "TEXT")
     private String checkoutConfig;
+    @Column(name = "min_amount_label")
+    private String minAmountLabel;
+
+    @Column(name = "partial_amount_label")
+    private String partialAmountLabel;
+
+    @Column(name = "partial_amount_description", columnDefinition = "TEXT")
+    private String partialAmountDescription;
+
+    @Column(name = "full_amount_label")
+    private String fullAmountLabel;
 
 
 // Add this field inside your existing PaymentLink model class implrment
@@ -148,6 +159,37 @@ private boolean upiLink = false;
 
     public void setCheckoutConfig(String checkoutConfig) {
         this.checkoutConfig = checkoutConfig;
+    }
+    public String getMinAmountLabel() {
+        return minAmountLabel;
+    }
+
+    public void setMinAmountLabel(String minAmountLabel) {
+        this.minAmountLabel = minAmountLabel;
+    }
+
+    public String getPartialAmountLabel() {
+        return partialAmountLabel;
+    }
+
+    public void setPartialAmountLabel(String partialAmountLabel) {
+        this.partialAmountLabel = partialAmountLabel;
+    }
+
+    public String getPartialAmountDescription() {
+        return partialAmountDescription;
+    }
+
+    public void setPartialAmountDescription(String partialAmountDescription) {
+        this.partialAmountDescription = partialAmountDescription;
+    }
+
+    public String getFullAmountLabel() {
+        return fullAmountLabel;
+    }
+
+    public void setFullAmountLabel(String fullAmountLabel) {
+        this.fullAmountLabel = fullAmountLabel;
     }
 
     
