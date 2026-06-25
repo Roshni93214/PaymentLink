@@ -82,6 +82,30 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
                     if (themeObj instanceof String themeColor) {
                         paymentLink.setThemeColor(themeColor);
                     }
+                    Object methodObj = checkoutMap.get("method");
+
+                    if (methodObj instanceof java.util.Map<?, ?> methodMap) {
+
+                        Object netbanking = methodMap.get("netbanking");
+                        if (netbanking instanceof Boolean value) {
+                            paymentLink.setEnableNetbanking(value);
+                        }
+
+                        Object card = methodMap.get("card");
+                        if (card instanceof Boolean value) {
+                            paymentLink.setEnableCard(value);
+                        }
+
+                        Object upi = methodMap.get("upi");
+                        if (upi instanceof Boolean value) {
+                            paymentLink.setEnableUpi(value);
+                        }
+
+                        Object wallet = methodMap.get("wallet");
+                        if (wallet instanceof Boolean value) {
+                            paymentLink.setEnableWallet(value);
+                        }
+                    }
                     paymentLink.setBusinessName(businessName);
                 }
             }
@@ -173,6 +197,10 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         response.setUserId(paymentLink.getUserId());
         response.setBusinessName(paymentLink.getBusinessName());
         response.setThemeColor(paymentLink.getThemeColor());
+        response.setEnableNetbanking(paymentLink.getEnableNetbanking());
+        response.setEnableCard(paymentLink.getEnableCard());
+        response.setEnableUpi(paymentLink.getEnableUpi());
+        response.setEnableWallet(paymentLink.getEnableWallet());
         response.setWhatsappLink(false);
 
         // Bind the child responses

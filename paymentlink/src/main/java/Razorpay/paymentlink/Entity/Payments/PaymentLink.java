@@ -89,6 +89,17 @@ public void setReferenceId(String referenceId) { this.referenceId = referenceId;
     private String businessName;
     @Column(name = "theme_color")
     private String themeColor;
+    @Column(name = "enable_netbanking")
+    private Boolean enableNetbanking = true;
+
+    @Column(name = "enable_card")
+    private Boolean enableCard = true;
+
+    @Column(name = "enable_upi")
+    private Boolean enableUpi = true;
+
+    @Column(name = "enable_wallet")
+    private Boolean enableWallet = true;
 
 
 // Add this field inside your existing PaymentLink model class implrment

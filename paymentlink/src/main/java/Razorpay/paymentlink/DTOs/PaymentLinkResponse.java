@@ -28,6 +28,10 @@ public class PaymentLinkResponse {
     private String userId;
     private String businessName;
     private String themeColor;
+    private Boolean enableNetbanking;
+    private Boolean enableCard;
+    private Boolean enableUpi;
+    private Boolean enableWallet;
     private Boolean whatsappLink;
 
     private CustomerDTO customer;
