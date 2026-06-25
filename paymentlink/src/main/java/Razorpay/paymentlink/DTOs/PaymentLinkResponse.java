@@ -32,6 +32,7 @@ public class PaymentLinkResponse {
     private Boolean enableCard;
     private Boolean enableUpi;
     private Boolean enableWallet;
+    private String checkoutConfig;
     private Boolean whatsappLink;
 
     private CustomerDTO customer;

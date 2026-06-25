@@ -100,6 +100,8 @@ public void setReferenceId(String referenceId) { this.referenceId = referenceId;
 
     @Column(name = "enable_wallet")
     private Boolean enableWallet = true;
+    @Column(name = "checkout_config", columnDefinition = "TEXT")
+    private String checkoutConfig;
 
 
 // Add this field inside your existing PaymentLink model class implrment
@@ -139,6 +141,13 @@ private boolean upiLink = false;
 
     public void setThemeColor(String themeColor) {
         this.themeColor = themeColor;
+    }
+    public String getCheckoutConfig() {
+        return checkoutConfig;
+    }
+
+    public void setCheckoutConfig(String checkoutConfig) {
+        this.checkoutConfig = checkoutConfig;
     }
 
     

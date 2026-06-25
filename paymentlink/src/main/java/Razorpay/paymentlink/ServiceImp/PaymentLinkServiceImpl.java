@@ -108,6 +108,11 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
                     }
                     paymentLink.setBusinessName(businessName);
                 }
+                Object configObj = checkoutMap.get("config");
+
+                if (configObj != null) {
+                    paymentLink.setCheckoutConfig(configObj.toString());
+                }
             }
         }
         
@@ -201,6 +206,7 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         response.setEnableCard(paymentLink.getEnableCard());
         response.setEnableUpi(paymentLink.getEnableUpi());
         response.setEnableWallet(paymentLink.getEnableWallet());
+        response.setCheckoutConfig(paymentLink.getCheckoutConfig());
         response.setWhatsappLink(false);
 
         // Bind the child responses
@@ -247,9 +253,9 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
     paymentLink.setCurrency("INR"); // UPI is always INR
     paymentLink.setAcceptPartial(false); // UPI never accepts partials
     paymentLink.setReminderEnable(Boolean.TRUE.equals(request.getReminderEnable()));
-    
+
     // SAFE IMPLEMENTATION: Force to true for UPI flows
-    paymentLink.setUpiLink(true); 
+    paymentLink.setUpiLink(true);
 
     paymentLink.setDescription(request.getDescription());
     paymentLink.setReferenceId(request.getReferenceId());
@@ -278,6 +284,36 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
                 if (themeObj instanceof String themeColor) {
                     paymentLink.setThemeColor(themeColor);
                 }
+                Object methodObj = checkoutMap.get("method");
+
+                if (methodObj instanceof java.util.Map<?, ?> methodMap) {
+
+                    Object netbanking = methodMap.get("netbanking");
+                    if (netbanking instanceof Boolean value) {
+                        paymentLink.setEnableNetbanking(value);
+                    }
+
+                    Object card = methodMap.get("card");
+                    if (card instanceof Boolean value) {
+                        paymentLink.setEnableCard(value);
+                    }
+
+                    Object upi = methodMap.get("upi");
+                    if (upi instanceof Boolean value) {
+                        paymentLink.setEnableUpi(value);
+                    }
+
+                    Object wallet = methodMap.get("wallet");
+                    if (wallet instanceof Boolean value) {
+                        paymentLink.setEnableWallet(value);
+                    }
+                }
+                Object configObj = checkoutMap.get("config");
+
+                if (configObj != null) {
+                    System.out.println("CONFIG OBJ = " + configObj);
+                    paymentLink.setCheckoutConfig(configObj.toString());
+                }
             }
         }
 
@@ -286,6 +322,7 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
     }
 
     paymentLinkRepository.save(paymentLink);
+        System.out.println("SAVED CONFIG = " + paymentLink.getCheckoutConfig());
 
     // 4. Save Customer records if present
     CustomerDTO customerDTO = null;
@@ -363,6 +400,14 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
     response.setCancelledAt(0L);
     response.setUserId(paymentLink.getUserId());
         response.setBusinessName(paymentLink.getBusinessName());
+        response.setThemeColor(paymentLink.getThemeColor());
+
+        response.setEnableNetbanking(paymentLink.getEnableNetbanking());
+        response.setEnableCard(paymentLink.getEnableCard());
+        response.setEnableUpi(paymentLink.getEnableUpi());
+        response.setEnableWallet(paymentLink.getEnableWallet());
+
+        response.setCheckoutConfig(paymentLink.getCheckoutConfig());
     response.setWhatsappLink(false);
 
     response.setCustomer(customerDTO);
@@ -460,6 +505,14 @@ public PaymentLinkListResponse getAllPaymentLinks(String referenceId, String pay
         item.setUpiLink(paymentLink.isUpiLink());
         item.setWhatsappLink(false);
         item.setBusinessName(paymentLink.getBusinessName());
+        item.setThemeColor(paymentLink.getThemeColor());
+
+        item.setEnableNetbanking(paymentLink.getEnableNetbanking());
+        item.setEnableCard(paymentLink.getEnableCard());
+        item.setEnableUpi(paymentLink.getEnableUpi());
+        item.setEnableWallet(paymentLink.getEnableWallet());
+
+        item.setCheckoutConfig(paymentLink.getCheckoutConfig());
         item.setHideTopbar(paymentLink.isHideTopbar());
 
         // Attach mapped records
@@ -546,6 +599,12 @@ public PaymentLinkResponse getPaymentLinkById(String id) {
     response.setWhatsappLink(false);
     response.setBusinessName(paymentLink.getBusinessName());
     response.setThemeColor(paymentLink.getThemeColor());
+    response.setEnableNetbanking(paymentLink.getEnableNetbanking());
+    response.setEnableCard(paymentLink.getEnableCard());
+    response.setEnableUpi(paymentLink.getEnableUpi());
+    response.setEnableWallet(paymentLink.getEnableWallet());
+
+    response.setCheckoutConfig(paymentLink.getCheckoutConfig());
     response.setHideTopbar(paymentLink.isHideTopbar());
     
     // Explicit hardcoded overrides matching Razorpay behavior
