@@ -38,6 +38,7 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
     @Override
     @Transactional // Ensures database consistency across all 5 independent saves
     public PaymentLinkResponse createStandardPaymentLink(PaymentLinkRequest request) {
+        System.out.println("INSIDE STANDARD METHOD");
 
         // 1. Generate a mock Razorpay style unique Link ID
         String standardLinkId = "plink_" + UUID.randomUUID().toString().replace("-", "").substring(0, 14);
@@ -68,6 +69,8 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         paymentLink.setExpireBy(request.getExpireBy());
         paymentLink.setShortUrl("https://rzp.io/i/" + UUID.randomUUID().toString().substring(0, 7));
         paymentLink.setUserId("usr_mockAdmin123");
+        System.out.println("REQUEST = " + request);
+        System.out.println("OPTIONS = " + request.getOptions());
         if (request.getOptions() != null) {
 
             Object checkoutObj = request.getOptions().get("checkout");
@@ -187,6 +190,25 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
                 if (configObj != null) {
                     paymentLink.setCheckoutConfig(configObj.toString());
                 }
+                System.out.println("OPTIONS = " + request.getOptions());
+
+                Object offerObj = request.getOptions().get("offer");
+                System.out.println("OFFER OBJ = " + offerObj);
+
+                if (offerObj instanceof java.util.Map<?, ?> offerMap) {
+
+                    System.out.println("OFFER MAP = " + offerMap);
+
+                    Object offerId = offerMap.get("id");
+                    if (offerId instanceof String value) {
+                        paymentLink.setOfferId(value);
+                    }
+
+                    Object apply = offerMap.get("apply");
+                    if (apply instanceof Boolean value) {
+                        paymentLink.setOfferApply(value);
+                    }
+                }
             }
         }
 
@@ -295,6 +317,10 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         response.setExpiredOnLabel(paymentLink.getExpiredOnLabel());
         response.setAmountDueLabel(paymentLink.getAmountDueLabel());
         response.setShowIssuedTo(paymentLink.getShowIssuedTo());
+        response.setOfferId(paymentLink.getOfferId());
+        response.setOfferApply(paymentLink.getOfferApply());
+        response.setOfferId(paymentLink.getOfferId());
+        response.setOfferApply(paymentLink.getOfferApply());
         response.setWhatsappLink(false);
 
         // Bind the child responses
@@ -316,6 +342,7 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
     @Override
 @Transactional
 public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
+        System.out.println("INSIDE UPI METHOD");
 
 
     // 1. Enforce Razorpay UPI Business Rule Guards
@@ -396,13 +423,51 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
                         paymentLink.setEnableWallet(value);
                     }
                 }
+
                 Object configObj = checkoutMap.get("config");
 
                 if (configObj != null) {
                     System.out.println("CONFIG OBJ = " + configObj);
                     paymentLink.setCheckoutConfig(configObj.toString());
                 }
+                System.out.println("OPTIONS = " + request.getOptions());
+
+                Object offerObj = request.getOptions().get("offer");
+                System.out.println("OFFER OBJ = " + offerObj);
+
+                if (offerObj instanceof java.util.Map<?, ?> offerMap) {
+
+                    System.out.println("OFFER MAP = " + offerMap);
+
+                    Object offerId = offerMap.get("id");
+                    if (offerId instanceof String value) {
+                        paymentLink.setOfferId(value);
+                    }
+
+                    Object apply = offerMap.get("apply");
+                    if (apply instanceof Boolean value) {
+                        paymentLink.setOfferApply(value);
+                    }
+                }
             }
+            System.out.println("OPTIONS = " + request.getOptions());
+            Object offerObj = request.getOptions().get("offer");
+            System.out.println("OFFER OBJ = " + offerObj);
+
+            if (offerObj instanceof java.util.Map<?, ?> offerMap) {
+                System.out.println("OFFER MAP = " + offerMap);
+
+                Object offerId = offerMap.get("id");
+                if (offerId instanceof String value) {
+                    paymentLink.setOfferId(value);
+                }
+
+                Object apply = offerMap.get("apply");
+                if (apply instanceof Boolean value) {
+                    paymentLink.setOfferApply(value);
+                }
+            }
+
         }
 
     if (request.getNotes() != null) {
@@ -602,6 +667,8 @@ public PaymentLinkListResponse getAllPaymentLinks(String referenceId, String pay
 
         item.setCheckoutConfig(paymentLink.getCheckoutConfig());
         item.setHideTopbar(paymentLink.isHideTopbar());
+        item.setOfferId(paymentLink.getOfferId());
+        item.setOfferApply(paymentLink.getOfferApply());
 
         // Attach mapped records
         item.setCustomer(customerDTO);

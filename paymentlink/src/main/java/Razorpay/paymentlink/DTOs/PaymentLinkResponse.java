@@ -47,6 +47,8 @@ public class PaymentLinkResponse {
     private String expiredOnLabel;
     private String amountDueLabel;
     private Boolean showIssuedTo;
+    private String offerId;
+    private Boolean offerApply;
     private Boolean whatsappLink;
 
     private CustomerDTO customer;

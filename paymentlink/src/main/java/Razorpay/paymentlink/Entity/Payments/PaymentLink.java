@@ -142,6 +142,11 @@ public void setReferenceId(String referenceId) { this.referenceId = referenceId;
 
     @Column(name = "show_issued_to")
     private Boolean showIssuedTo = true;
+    @Column(name = "offer_id")
+    private String offerId;
+
+    @Column(name = "offer_apply")
+    private Boolean offerApply = false;
 
 
 // Add this field inside your existing PaymentLink model class implrment
@@ -298,6 +303,21 @@ private boolean upiLink = false;
 
     public void setShowIssuedTo(Boolean showIssuedTo) {
         this.showIssuedTo = showIssuedTo;
+    }
+    public String getOfferId() {
+        return offerId;
+    }
+
+    public void setOfferId(String offerId) {
+        this.offerId = offerId;
+    }
+
+    public Boolean getOfferApply() {
+        return offerApply;
+    }
+
+    public void setOfferApply(Boolean offerApply) {
+        this.offerApply = offerApply;
     }
     
 }   
