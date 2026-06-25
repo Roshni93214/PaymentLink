@@ -22,6 +22,6 @@ public class PaymentLinkRequest {
     private CustomerDTO customer; // Optional nested object
     private NotifyDTO notify; // Optional nested object
     private Map<String, String> notes; // Optional: max 15 pairs, max 256 chars each value
-    private OptionsDTO options;
+    private Map<String, Object> options;
     private List<TransferDTO> transfers;
 }

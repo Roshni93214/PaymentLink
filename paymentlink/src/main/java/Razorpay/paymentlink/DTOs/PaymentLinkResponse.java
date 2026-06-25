@@ -34,6 +34,13 @@ public class PaymentLinkResponse {
     private Boolean enableUpi;
     private Boolean enableWallet;
     private String checkoutConfig;
+    private String orderMethod;
+
+    private String bankAccountNumber;
+
+    private String bankAccountName;
+
+    private String bankAccountIfsc;
     private String minAmountLabel;
     private String partialAmountLabel;
     private String partialAmountDescription;

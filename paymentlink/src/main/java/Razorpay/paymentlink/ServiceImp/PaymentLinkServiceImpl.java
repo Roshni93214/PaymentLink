@@ -81,6 +81,38 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         System.out.println("REQUEST = " + request);
         System.out.println("OPTIONS = " + request.getOptions());
         if (request.getOptions() != null) {
+            Object orderObj = request.getOptions().get("order");
+
+            if (orderObj instanceof java.util.Map<?, ?> orderMap) {
+
+                Object methodObj = orderMap.get("method");
+                System.out.println("METHOD = " + methodObj);
+
+                if (methodObj instanceof String value) {
+                    paymentLink.setOrderMethod(value);
+                }
+
+                Object bankAccountObj = orderMap.get("bank_account");
+                System.out.println("BANK ACCOUNT = " + bankAccountObj);
+
+                if (bankAccountObj instanceof java.util.Map<?, ?> bankMap) {
+
+                    Object accountNumber = bankMap.get("account_number");
+                    if (accountNumber instanceof String value) {
+                        paymentLink.setBankAccountNumber(value);
+                    }
+
+                    Object name = bankMap.get("name");
+                    if (name instanceof String value) {
+                        paymentLink.setBankAccountName(value);
+                    }
+
+                    Object ifsc = bankMap.get("ifsc");
+                    if (ifsc instanceof String value) {
+                        paymentLink.setBankAccountIfsc(value);
+                    }
+                }
+            }
 
             Object checkoutObj = request.getOptions().get("checkout");
 
@@ -225,6 +257,10 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         if (request.getNotes() != null) {
             paymentLink.setNotes(request.getNotes());
         }
+        System.out.println("ORDER METHOD = " + paymentLink.getOrderMethod());
+        System.out.println("ACCOUNT NUMBER = " + paymentLink.getBankAccountNumber());
+        System.out.println("ACCOUNT NAME = " + paymentLink.getBankAccountName());
+        System.out.println("IFSC = " + paymentLink.getBankAccountIfsc());
 
         paymentLinkRepository.save(paymentLink);
         // Save Transfers if present
@@ -329,6 +365,10 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         response.setEnableUpi(paymentLink.getEnableUpi());
         response.setEnableWallet(paymentLink.getEnableWallet());
         response.setCheckoutConfig(paymentLink.getCheckoutConfig());
+        response.setOrderMethod(paymentLink.getOrderMethod());
+        response.setBankAccountNumber(paymentLink.getBankAccountNumber());
+        response.setBankAccountName(paymentLink.getBankAccountName());
+        response.setBankAccountIfsc(paymentLink.getBankAccountIfsc());
         response.setMinAmountLabel(paymentLink.getMinAmountLabel());
         response.setPartialAmountLabel(paymentLink.getPartialAmountLabel());
         response.setPartialAmountDescription(paymentLink.getPartialAmountDescription());
@@ -410,11 +450,15 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
     paymentLink.setExpireBy(request.getExpireBy());
     paymentLink.setShortUrl("https://rzp.io/i/" + UUID.randomUUID().toString().substring(0, 7));
     paymentLink.setUserId("usr_mockAdmin123");
+        System.out.println("ENTERED OPTIONS BLOCK");
+        Object orderObj = request.getOptions().get("order");
+        System.out.println("ORDER OBJ = " + orderObj);
         if (request.getOptions() != null) {
 
             Object checkoutObj = request.getOptions().get("checkout");
 
             if (checkoutObj instanceof java.util.Map<?, ?> checkoutMap) {
+                System.out.println("INSIDE ORDER MAP");
 
                 Object nameObj = checkoutMap.get("name");
 
@@ -606,6 +650,10 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
         response.setEnableWallet(paymentLink.getEnableWallet());
 
         response.setCheckoutConfig(paymentLink.getCheckoutConfig());
+        response.setOrderMethod(paymentLink.getOrderMethod());
+        response.setBankAccountNumber(paymentLink.getBankAccountNumber());
+        response.setBankAccountName(paymentLink.getBankAccountName());
+        response.setBankAccountIfsc(paymentLink.getBankAccountIfsc());
     response.setWhatsappLink(false);
 
     response.setCustomer(customerDTO);
@@ -714,6 +762,10 @@ public PaymentLinkListResponse getAllPaymentLinks(String referenceId, String pay
         item.setEnableWallet(paymentLink.getEnableWallet());
 
         item.setCheckoutConfig(paymentLink.getCheckoutConfig());
+        item.setOrderMethod(paymentLink.getOrderMethod());
+        item.setBankAccountNumber(paymentLink.getBankAccountNumber());
+        item.setBankAccountName(paymentLink.getBankAccountName());
+        item.setBankAccountIfsc(paymentLink.getBankAccountIfsc());
         item.setHideTopbar(paymentLink.isHideTopbar());
         item.setOfferId(paymentLink.getOfferId());
         item.setOfferApply(paymentLink.getOfferApply());
@@ -821,6 +873,10 @@ public PaymentLinkResponse getPaymentLinkById(String id) {
     response.setEnableWallet(paymentLink.getEnableWallet());
 
     response.setCheckoutConfig(paymentLink.getCheckoutConfig());
+    response.setOrderMethod(paymentLink.getOrderMethod());
+    response.setBankAccountNumber(paymentLink.getBankAccountNumber());
+    response.setBankAccountName(paymentLink.getBankAccountName());
+    response.setBankAccountIfsc(paymentLink.getBankAccountIfsc());
     response.setHideTopbar(paymentLink.isHideTopbar());
 
     // Explicit hardcoded overrides matching Razorpay behavior
