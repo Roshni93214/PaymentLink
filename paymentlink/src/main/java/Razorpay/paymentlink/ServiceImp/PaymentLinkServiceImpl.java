@@ -77,19 +77,11 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
                 Object nameObj = checkoutMap.get("name");
 
                 if (nameObj instanceof String businessName) {
-                    paymentLink.setBusinessName(businessName);
-                }
-            }
-        }
-        if (request.getOptions() != null) {
+                    Object themeObj = checkoutMap.get("theme_color");
 
-            Object checkoutObj = request.getOptions().get("checkout");
-
-            if (checkoutObj instanceof java.util.Map<?, ?> checkoutMap) {
-
-                Object nameObj = checkoutMap.get("name");
-
-                if (nameObj instanceof String businessName) {
+                    if (themeObj instanceof String themeColor) {
+                        paymentLink.setThemeColor(themeColor);
+                    }
                     paymentLink.setBusinessName(businessName);
                 }
             }
@@ -180,6 +172,7 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         response.setCancelledAt(0L);
         response.setUserId(paymentLink.getUserId());
         response.setBusinessName(paymentLink.getBusinessName());
+        response.setThemeColor(paymentLink.getThemeColor());
         response.setWhatsappLink(false);
 
         // Bind the child responses
@@ -201,7 +194,8 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
     @Override
 @Transactional
 public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
-    
+
+
     // 1. Enforce Razorpay UPI Business Rule Guards
     if (Boolean.TRUE.equals(request.getAcceptPartial())) {
         throw new IllegalArgumentException("partial payment not supported in upi link.");
@@ -249,6 +243,12 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
 
                 if (nameObj instanceof String businessName) {
                     paymentLink.setBusinessName(businessName);
+
+                }
+                Object themeObj = checkoutMap.get("theme_color");
+
+                if (themeObj instanceof String themeColor) {
+                    paymentLink.setThemeColor(themeColor);
                 }
             }
         }
@@ -517,6 +517,7 @@ public PaymentLinkResponse getPaymentLinkById(String id) {
     response.setUpiLink(paymentLink.isUpiLink()); // Standard = false, UPI = true
     response.setWhatsappLink(false);
     response.setBusinessName(paymentLink.getBusinessName());
+    response.setThemeColor(paymentLink.getThemeColor());
     response.setHideTopbar(paymentLink.isHideTopbar());
     
     // Explicit hardcoded overrides matching Razorpay behavior

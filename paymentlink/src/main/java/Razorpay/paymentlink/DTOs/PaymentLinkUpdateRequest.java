@@ -28,4 +28,14 @@ public class PaymentLinkUpdateRequest {
 
     public Map<String, String> getNotes() { return notes; }
     public void setNotes(Map<String, String> notes) { this.notes = notes; }
+
+    private Map<String, Object> options;
+
+    public Map<String, Object> getOptions() {
+        return options;
+    }
+
+    public void setOptions(Map<String, Object> options) {
+        this.options = options;
+    }
 }

@@ -87,6 +87,8 @@ public void setReferenceId(String referenceId) { this.referenceId = referenceId;
     private String userId;
     @Column(name = "business_name")
     private String businessName;
+    @Column(name = "theme_color")
+    private String themeColor;
 
 
 // Add this field inside your existing PaymentLink model class implrment
@@ -119,6 +121,13 @@ private boolean upiLink = false;
     
     public void updatePlinkIdDirectly(String plinkId) {
         this.id = plinkId;
+    }
+    public String getThemeColor() {
+        return themeColor;
+    }
+
+    public void setThemeColor(String themeColor) {
+        this.themeColor = themeColor;
     }
 
     

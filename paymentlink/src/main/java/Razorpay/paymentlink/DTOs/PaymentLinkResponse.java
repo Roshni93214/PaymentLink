@@ -27,6 +27,7 @@ public class PaymentLinkResponse {
     private Long cancelledAt; // UNIX timestamp
     private String userId;
     private String businessName;
+    private String themeColor;
     private Boolean whatsappLink;
 
     private CustomerDTO customer;
