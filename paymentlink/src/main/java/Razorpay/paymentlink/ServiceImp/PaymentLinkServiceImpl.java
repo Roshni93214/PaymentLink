@@ -220,6 +220,23 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         }
 
         paymentLinkRepository.save(paymentLink);
+        // Save Transfers if present
+        if (request.getTransfers() != null && !request.getTransfers().isEmpty()) {
+
+            for (TransferDTO transferDTO : request.getTransfers()) {
+
+                Transfer transfer = new Transfer();
+
+                transfer.setTransferId("trf_" + UUID.randomUUID().toString().replace("-", "").substring(0, 10));
+                transfer.setPaymentLinkId(standardLinkId);
+
+                transfer.setAccount(transferDTO.getAccount());
+                transfer.setAmount(transferDTO.getAmount());
+                transfer.setCurrency(transferDTO.getCurrency());
+
+                transferRepository.save(transfer);
+            }
+        }
 
         // 3. Extract and save Customer into its independent table
         CustomerDTO customerDTO = null;
@@ -331,7 +348,9 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         response.setReminders(remindersDTO);
         response.setNotes(request.getNotes());
         response.setPayments(new ArrayList<>()); // Empty list array as per creation spec docs
-
+        if (request.getTransfers() != null) {
+            response.setTransfers(request.getTransfers());
+        }
         // Add this line in BOTH service methods right before "return response;"
         response.setUpiLink(paymentLink.isUpiLink());
 
