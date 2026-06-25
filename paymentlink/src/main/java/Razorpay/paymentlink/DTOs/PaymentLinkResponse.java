@@ -2,7 +2,9 @@ package Razorpay.paymentlink.DTOs;
 
 import lombok.Data;
 import java.util.List;
+import java.util.List;
 import java.util.Map;
+
 
 @Data
 public class PaymentLinkResponse {
@@ -50,6 +52,7 @@ public class PaymentLinkResponse {
     private String offerId;
     private Boolean offerApply;
     private Boolean whatsappLink;
+    private List<TransferDTO> transfers;
 
     private CustomerDTO customer;
     private NotifyDTO notify;
