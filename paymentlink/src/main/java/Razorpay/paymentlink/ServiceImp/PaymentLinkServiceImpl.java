@@ -33,12 +33,12 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
     private final RemindersRepository remindersRepository;
     private final NotesRepository notesRepository;
 
-   
-        
+
+
     @Override
     @Transactional // Ensures database consistency across all 5 independent saves
     public PaymentLinkResponse createStandardPaymentLink(PaymentLinkRequest request) {
-      
+
         // 1. Generate a mock Razorpay style unique Link ID
         String standardLinkId = "plink_" + UUID.randomUUID().toString().replace("-", "").substring(0, 14);
         long currentTimeMillis = System.currentTimeMillis() / 1000; // UNIX Timestamp format
@@ -49,14 +49,14 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         paymentLink.setAmount(request.getAmount());
         paymentLink.setAmountPaid(0); // Brand new link, no amount paid yet
         paymentLink.setCurrency(request.getCurrency() != null ? request.getCurrency() : "INR");
-        
+
         // Null-safe unboxing for booleans
         paymentLink.setAcceptPartial(Boolean.TRUE.equals(request.getAcceptPartial()));
         paymentLink.setReminderEnable(Boolean.TRUE.equals(request.getReminderEnable()));
-        
+
         // Handle upiLink safely if your entity has the setter
-        paymentLink.setUpiLink(Boolean.TRUE.equals(request.getUpiLink())); 
-        
+        paymentLink.setUpiLink(Boolean.TRUE.equals(request.getUpiLink()));
+
         paymentLink.setFirstMinPartialAmount(request.getFirstMinPartialAmount());
         paymentLink.setDescription(request.getDescription());
         paymentLink.setReferenceId(request.getReferenceId());
@@ -110,6 +110,56 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
                 }
                 Object configObj = checkoutMap.get("config");
                 Object partialPaymentObj = checkoutMap.get("partial_payment");
+                Object hostedPageObj = checkoutMap.get("hosted_page");
+                System.out.println("HOSTED PAGE = " + hostedPageObj);
+                System.out.println("HOSTED PAGE = " + hostedPageObj);
+
+                if (hostedPageObj instanceof java.util.Map<?, ?> hostedPageMap) {
+
+                    Object labelObj = hostedPageMap.get("label");
+                    System.out.println("LABEL OBJ = " + labelObj);
+                    System.out.println("LABEL OBJ = " + labelObj);
+
+                    if (labelObj instanceof java.util.Map<?, ?> labelMap) {
+
+                        Object receipt = labelMap.get("receipt");
+                        if (receipt instanceof String value) paymentLink.setReceiptLabel(value);
+
+                        Object description = labelMap.get("description");
+                        if (description instanceof String value) paymentLink.setDescriptionLabel(value);
+
+                        Object amountPayable = labelMap.get("amount_payable");
+                        if (amountPayable instanceof String value) paymentLink.setAmountPayableLabel(value);
+
+                        Object amountPaid = labelMap.get("amount_paid");
+                        if (amountPaid instanceof String value) paymentLink.setAmountPaidLabel(value);
+
+                        Object partialAmountDue = labelMap.get("partial_amount_due");
+                        if (partialAmountDue instanceof String value) paymentLink.setPartialAmountDueLabel(value);
+
+                        Object partialAmountPaid = labelMap.get("partial_amount_paid");
+                        if (partialAmountPaid instanceof String value) paymentLink.setPartialAmountPaidLabel(value);
+
+                        Object expireBy = labelMap.get("expire_by");
+                        if (expireBy instanceof String value) paymentLink.setExpireByLabel(value);
+
+                        Object expiredOn = labelMap.get("expired_on");
+                        if (expiredOn instanceof String value) paymentLink.setExpiredOnLabel(value);
+
+                        Object amountDue = labelMap.get("amount_due");
+                        if (amountDue instanceof String value) paymentLink.setAmountDueLabel(value);
+                    }
+
+                    Object showPrefObj = hostedPageMap.get("show_preferences");
+
+                    if (showPrefObj instanceof java.util.Map<?, ?> prefMap) {
+                        Object issuedTo = prefMap.get("issued_to");
+
+                        if (issuedTo instanceof Boolean value) {
+                            paymentLink.setShowIssuedTo(value);
+                        }
+                    }
+                }
 
                 if (partialPaymentObj instanceof java.util.Map<?, ?> partialMap) {
 
@@ -139,7 +189,7 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
                 }
             }
         }
-        
+
         // Handling ElementCollection map mapping inside PaymentLink entity
         if (request.getNotes() != null) {
             paymentLink.setNotes(request.getNotes());
@@ -235,6 +285,16 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
         response.setPartialAmountLabel(paymentLink.getPartialAmountLabel());
         response.setPartialAmountDescription(paymentLink.getPartialAmountDescription());
         response.setFullAmountLabel(paymentLink.getFullAmountLabel());
+        response.setReceiptLabel(paymentLink.getReceiptLabel());
+        response.setDescriptionLabel(paymentLink.getDescriptionLabel());
+        response.setAmountPayableLabel(paymentLink.getAmountPayableLabel());
+        response.setAmountPaidLabel(paymentLink.getAmountPaidLabel());
+        response.setPartialAmountDueLabel(paymentLink.getPartialAmountDueLabel());
+        response.setPartialAmountPaidLabel(paymentLink.getPartialAmountPaidLabel());
+        response.setExpireByLabel(paymentLink.getExpireByLabel());
+        response.setExpiredOnLabel(paymentLink.getExpiredOnLabel());
+        response.setAmountDueLabel(paymentLink.getAmountDueLabel());
+        response.setShowIssuedTo(paymentLink.getShowIssuedTo());
         response.setWhatsappLink(false);
 
         // Bind the child responses
@@ -463,7 +523,7 @@ public PaymentLinkListResponse getAllPaymentLinks(String referenceId, String pay
     java.util.List<PaymentLinkResponse> compiledResponses = new ArrayList<>();
 
     for (PaymentLink paymentLink : links) {
-        
+
         // CRITICAL FILTER 1: Must be a UPI link
         //if (!paymentLink.isUpiLink()) {
         //    continue;
@@ -551,7 +611,7 @@ public PaymentLinkListResponse getAllPaymentLinks(String referenceId, String pay
         item.setPayments(new ArrayList<>()); // Kept empty as per core documentation spec
 
         // CRITICAL FILTER 3: Filter by payment_id if requested (Applied on the final populated object)
-        if (paymentId != null && (item.getPayments() == null || 
+        if (paymentId != null && (item.getPayments() == null ||
             item.getPayments().stream().noneMatch(p -> paymentId.equals(p.getPaymentId())))) {
             continue;
         }
@@ -568,7 +628,7 @@ public PaymentLinkListResponse getAllPaymentLinks(String referenceId, String pay
 @Override
 @Transactional(readOnly = true) // Optimal performance configuration for lookup reads
 public PaymentLinkResponse getPaymentLinkById(String id) {
-    
+
     // 1. Core verification check: Find the entity row or fail gracefully
     PaymentLink paymentLink = paymentLinkRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("The id provided does not exist"));
@@ -634,7 +694,7 @@ public PaymentLinkResponse getPaymentLinkById(String id) {
 
     response.setCheckoutConfig(paymentLink.getCheckoutConfig());
     response.setHideTopbar(paymentLink.isHideTopbar());
-    
+
     // Explicit hardcoded overrides matching Razorpay behavior
     response.setExpiredAt(0L);
     response.setCancelledAt(0L);
@@ -693,15 +753,15 @@ public PaymentLinkResponse getPaymentLinkById(String id) {
         // 4. Update Notes database collections safely if requested
         if (request.getNotes() != null) {
             // Flush old records tied to this payment ID
-            notesRepository.deleteByPaymentLinkId(id); 
-            
+            notesRepository.deleteByPaymentLinkId(id);
+
             // Populate new records
             request.getNotes().forEach((key, val) -> {
                 Notes newNote = new Notes();
 
                 // Match the same clean format generator you have in your POST method:
        // newNote.setNoteId("note_" + java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 10));
-       newNote.setNoteId(java.util.UUID.randomUUID().toString()); 
+       newNote.setNoteId(java.util.UUID.randomUUID().toString());
 
         // ---- ADD THIS LINE SO HIBERNATE KNOWS HOW TO PROCESS IT ----
         newNote.setUpdateAction(true);
@@ -713,7 +773,7 @@ public PaymentLinkResponse getPaymentLinkById(String id) {
             });
         }
 
-        // 5. Delegate back to our existing retrieval routine to gather compiled tables 
+        // 5. Delegate back to our existing retrieval routine to gather compiled tables
         return this.getPaymentLinkById(id);
     }
 
@@ -756,7 +816,7 @@ public PaymentLinkResponse updateUpiPaymentLink(String id, PaymentLinkUpdateRequ
     if (request.getNotes() != null) {
         // Clear old keys to avoid orphan drift rows
         notesRepository.deleteByPaymentLinkId(id);
-        
+
         // Save new notes rows
         request.getNotes().forEach((key, val) -> {
             Notes note = new Notes();

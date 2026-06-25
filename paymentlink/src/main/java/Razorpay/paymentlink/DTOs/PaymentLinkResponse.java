@@ -37,6 +37,16 @@ public class PaymentLinkResponse {
     private String partialAmountLabel;
     private String partialAmountDescription;
     private String fullAmountLabel;
+    private String receiptLabel;
+    private String descriptionLabel;
+    private String amountPayableLabel;
+    private String amountPaidLabel;
+    private String partialAmountDueLabel;
+    private String partialAmountPaidLabel;
+    private String expireByLabel;
+    private String expiredOnLabel;
+    private String amountDueLabel;
+    private Boolean showIssuedTo;
     private Boolean whatsappLink;
 
     private CustomerDTO customer;

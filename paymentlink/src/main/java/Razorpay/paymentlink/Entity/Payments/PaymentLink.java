@@ -113,6 +113,35 @@ public void setReferenceId(String referenceId) { this.referenceId = referenceId;
 
     @Column(name = "full_amount_label")
     private String fullAmountLabel;
+    @Column(name = "receipt_label")
+    private String receiptLabel;
+
+    @Column(name = "description_label")
+    private String descriptionLabel;
+
+    @Column(name = "amount_payable_label")
+    private String amountPayableLabel;
+
+    @Column(name = "amount_paid_label")
+    private String amountPaidLabel;
+
+    @Column(name = "partial_amount_due_label")
+    private String partialAmountDueLabel;
+
+    @Column(name = "partial_amount_paid_label")
+    private String partialAmountPaidLabel;
+
+    @Column(name = "expire_by_label")
+    private String expireByLabel;
+
+    @Column(name = "expired_on_label", columnDefinition = "TEXT")
+    private String expiredOnLabel;
+
+    @Column(name = "amount_due_label")
+    private String amountDueLabel;
+
+    @Column(name = "show_issued_to")
+    private Boolean showIssuedTo = true;
 
 
 // Add this field inside your existing PaymentLink model class implrment
@@ -191,6 +220,84 @@ private boolean upiLink = false;
     public void setFullAmountLabel(String fullAmountLabel) {
         this.fullAmountLabel = fullAmountLabel;
     }
+    public String getReceiptLabel() {
+        return receiptLabel;
+    }
 
+    public void setReceiptLabel(String receiptLabel) {
+        this.receiptLabel = receiptLabel;
+    }
+
+    public String getDescriptionLabel() {
+        return descriptionLabel;
+    }
+
+    public void setDescriptionLabel(String descriptionLabel) {
+        this.descriptionLabel = descriptionLabel;
+    }
+
+    public String getAmountPayableLabel() {
+        return amountPayableLabel;
+    }
+
+    public void setAmountPayableLabel(String amountPayableLabel) {
+        this.amountPayableLabel = amountPayableLabel;
+    }
+
+    public String getAmountPaidLabel() {
+        return amountPaidLabel;
+    }
+
+    public void setAmountPaidLabel(String amountPaidLabel) {
+        this.amountPaidLabel = amountPaidLabel;
+    }
+
+    public String getPartialAmountDueLabel() {
+        return partialAmountDueLabel;
+    }
+
+    public void setPartialAmountDueLabel(String partialAmountDueLabel) {
+        this.partialAmountDueLabel = partialAmountDueLabel;
+    }
+
+    public String getPartialAmountPaidLabel() {
+        return partialAmountPaidLabel;
+    }
+
+    public void setPartialAmountPaidLabel(String partialAmountPaidLabel) {
+        this.partialAmountPaidLabel = partialAmountPaidLabel;
+    }
+
+    public String getExpireByLabel() {
+        return expireByLabel;
+    }
+
+    public void setExpireByLabel(String expireByLabel) {
+        this.expireByLabel = expireByLabel;
+    }
+
+    public String getExpiredOnLabel() {
+        return expiredOnLabel;
+    }
+
+    public void setExpiredOnLabel(String expiredOnLabel) {
+        this.expiredOnLabel = expiredOnLabel;
+    }
+
+    public String getAmountDueLabel() {
+        return amountDueLabel;
+    }
+
+    public void setAmountDueLabel(String amountDueLabel) {
+        this.amountDueLabel = amountDueLabel;
+    }
+
+    public Boolean getShowIssuedTo() {
+        return showIssuedTo;
+    }
+
+    public void setShowIssuedTo(Boolean showIssuedTo) {
+        this.showIssuedTo = showIssuedTo;
+    }
     
 }   
