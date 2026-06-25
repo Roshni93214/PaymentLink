@@ -451,9 +451,9 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
     paymentLink.setShortUrl("https://rzp.io/i/" + UUID.randomUUID().toString().substring(0, 7));
     paymentLink.setUserId("usr_mockAdmin123");
         System.out.println("ENTERED OPTIONS BLOCK");
-        Object orderObj = request.getOptions().get("order");
-        System.out.println("ORDER OBJ = " + orderObj);
         if (request.getOptions() != null) {
+            Object orderObj = request.getOptions().get("order");
+            System.out.println("ORDER OBJ = " + orderObj);
 
             Object checkoutObj = request.getOptions().get("checkout");
 
@@ -943,6 +943,7 @@ public PaymentLinkResponse getPaymentLinkById(String id) {
 
             // Populate new records
             request.getNotes().forEach((key, val) -> {
+
                 Notes newNote = new Notes();
 
                 // Match the same clean format generator you have in your POST method:
@@ -1003,9 +1004,12 @@ public PaymentLinkResponse updateUpiPaymentLink(String id, PaymentLinkUpdateRequ
         // Clear old keys to avoid orphan drift rows
         notesRepository.deleteByPaymentLinkId(id);
 
+
         // Save new notes rows
         request.getNotes().forEach((key, val) -> {
             Notes note = new Notes();
+            note.setNoteId(UUID.randomUUID().toString());
+            note.setUpdateAction(true);
             note.setPaymentLinkId(id);
             note.setNoteKey(key);
             note.setNoteValue(val);
