@@ -15,7 +15,10 @@ import Razorpay.paymentlink.Repository.RemindersRepository;
 import Razorpay.paymentlink.Service.PaymentLinkService;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import lombok.RequiredArgsConstructor;
+import java.util.List;
+import Razorpay.paymentlink.DTOs.TransferDTO;
 
 
 import org.springframework.stereotype.Service;
@@ -40,7 +43,11 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
     @Override
     @Transactional // Ensures database consistency across all 5 independent saves
     public PaymentLinkResponse createStandardPaymentLink(PaymentLinkRequest request) {
+        System.out.println("TRANSFERS = " + request.getTransfers());
         System.out.println("INSIDE STANDARD METHOD");
+        System.out.println("TRANSFERS = " + request.getTransfers());
+        System.out.println("TRANSFERS = " + request.getTransfers());
+        System.out.println("REQUEST = " + request);
 
         // 1. Generate a mock Razorpay style unique Link ID
         String standardLinkId = "plink_" + UUID.randomUUID().toString().replace("-", "").substring(0, 14);
@@ -496,6 +503,23 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
     }
 
     paymentLinkRepository.save(paymentLink);
+        // Save Transfers if present
+        if (request.getTransfers() != null && !request.getTransfers().isEmpty()) {
+
+            for (TransferDTO transferDTO : request.getTransfers()) {
+
+                Transfer transfer = new Transfer();
+
+                transfer.setTransferId("trf_" + UUID.randomUUID().toString().replace("-", "").substring(0, 10));
+                transfer.setPaymentLinkId(upiLinkId);
+
+                transfer.setAccount(transferDTO.getAccount());
+                transfer.setAmount(transferDTO.getAmount());
+                transfer.setCurrency(transferDTO.getCurrency());
+
+                transferRepository.save(transfer);
+            }
+        }
         System.out.println("SAVED CONFIG = " + paymentLink.getCheckoutConfig());
 
     // 4. Save Customer records if present
@@ -589,6 +613,9 @@ public PaymentLinkResponse createUpiPaymentLink(PaymentLinkRequest request) {
     response.setReminders(remindersDTO);
     response.setNotes(request.getNotes());
     response.setPayments(new ArrayList<>());
+        if (request.getTransfers() != null) {
+            response.setTransfers(request.getTransfers());
+        }
 
 
     // Add this line in BOTH service methods right before "return response;"
@@ -696,8 +723,21 @@ public PaymentLinkListResponse getAllPaymentLinks(String referenceId, String pay
         item.setNotify(notifyDTO);
         item.setReminders(remindersDTO);
         item.setNotes(notesMap.isEmpty() ? paymentLink.getNotes() : notesMap);
-        item.setPayments(new ArrayList<>()); // Kept empty as per core documentation spec
+        item.setPayments(new ArrayList<>());// Kept empty as per core documentation spec
+        List<TransferDTO> transferDTOList = new ArrayList<>();
 
+        transferRepository.findByPaymentLinkId(linkId).forEach(transfer -> {
+
+            TransferDTO dto = new TransferDTO();
+
+            dto.setAccount(transfer.getAccount());
+            dto.setAmount(transfer.getAmount());
+            dto.setCurrency(transfer.getCurrency());
+
+            transferDTOList.add(dto);
+        });
+
+        item.setTransfers(transferDTOList);
         // CRITICAL FILTER 3: Filter by payment_id if requested (Applied on the final populated object)
         if (paymentId != null && (item.getPayments() == null ||
             item.getPayments().stream().noneMatch(p -> paymentId.equals(p.getPaymentId())))) {
@@ -837,6 +877,8 @@ public PaymentLinkResponse getPaymentLinkById(String id) {
         // Capture update timestamp (Unix Epoch seconds)
         paymentLink.setUpdatedAt(System.currentTimeMillis() / 1000L);
         paymentLinkRepository.save(paymentLink);
+        // Save Transfers if present
+
 
         // 4. Update Notes database collections safely if requested
         if (request.getNotes() != null) {
