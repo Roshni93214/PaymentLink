@@ -1,5 +1,6 @@
 package Razorpay.paymentlink.ServiceImp;
-
+import Razorpay.paymentlink.Entity.Payments.Transfer;
+import Razorpay.paymentlink.Repository.TransferRepository;
 import Razorpay.paymentlink.DTOs.*;
 import Razorpay.paymentlink.Entity.Payments.Customer;
 import Razorpay.paymentlink.Entity.Payments.Notes;
@@ -32,6 +33,7 @@ public class PaymentLinkServiceImpl implements PaymentLinkService {
     private final NotifyRepository notifyRepository;
     private final RemindersRepository remindersRepository;
     private final NotesRepository notesRepository;
+    private final TransferRepository transferRepository;
 
 
 
