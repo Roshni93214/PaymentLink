@@ -3,9 +3,6 @@ package Razorpay.paymentlink.DTOs;
 import lombok.Data;
 import java.util.Map;
 import java.util.List;
-import Razorpay.paymentlink.DTOs.TransferDTO;
-
-
 
 @Data
 public class PaymentLinkRequest {
@@ -25,6 +22,6 @@ public class PaymentLinkRequest {
     private CustomerDTO customer; // Optional nested object
     private NotifyDTO notify; // Optional nested object
     private Map<String, String> notes; // Optional: max 15 pairs, max 256 chars each value
-    private Map<String, Object> options;
+    private OptionsDTO options;
     private List<TransferDTO> transfers;
 }

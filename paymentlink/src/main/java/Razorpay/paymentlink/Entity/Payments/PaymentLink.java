@@ -102,6 +102,17 @@ public void setReferenceId(String referenceId) { this.referenceId = referenceId;
     private Boolean enableWallet = true;
     @Column(name = "checkout_config", columnDefinition = "TEXT")
     private String checkoutConfig;
+    @Column(name = "order_method")
+    private String orderMethod;
+
+    @Column(name = "bank_account_number")
+    private String bankAccountNumber;
+
+    @Column(name = "bank_account_name")
+    private String bankAccountName;
+
+    @Column(name = "bank_account_ifsc")
+    private String bankAccountIfsc;
     @Column(name = "min_amount_label")
     private String minAmountLabel;
 
